@@ -1,14 +1,17 @@
-import { Card, Avatar, Button } from "antd";
-import { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { Card, Avatar, Button } from 'antd';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { logoutAction } from "../reducers/user";
+import { LOG_OUT_REQUEST } from '../reducers/user';
 
 const UserProfile = () => {
+  const { me, logOutLoading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const onLogOut = useCallback(() => {
-    dispatch(logoutAction());
+    dispatch({
+      type: LOG_OUT_REQUEST,
+    });
   }, []);
 
   return (
@@ -16,20 +19,25 @@ const UserProfile = () => {
       actions={[
         <div key="chackchack">
           짹짹
-          <br />0
+          <br />{me.Posts.length}
         </div>,
         <div key="following">
           팔로잉
-          <br />0
+          <br />{me.Followings.length}
         </div>,
         <div key="following">
           팔로워
-          <br />0
+          <br />{me.Followers.length}
         </div>,
       ]}
     >
-      <Card.Meta avatar={<Avatar>livedata</Avatar>} title="livedata" />
-      <Button onClick={onLogOut}>로그아웃</Button>
+      <Card.Meta
+        avatar={<Avatar>{me.nickname[0]}</Avatar>}
+        title={me.nickname}
+      />
+      <Button onClick={onLogOut} loading={logOutLoading}>
+        로그아웃
+      </Button>
     </Card>
   );
 };

@@ -1,10 +1,10 @@
-import { Form, Input, Button } from "antd";
-import Link from "next/link";
-import { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
-import styled from "styled-components";
-import useInput from "../hooks/useInput";
-import { loginAction } from "../reducers/user";
+import { Form, Input, Button } from 'antd';
+import Link from 'next/link';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
+import useInput from '../hooks/useInput';
+import { LOG_IN_REQUEST } from '../reducers/user';
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -16,21 +16,24 @@ const FormWrapper = styled(Form)`
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const [id, onChangeId] = useInput("");
-  const [password, onChangePassword] = useInput("");
-  const [passwordCheck, setPasswordCheck] = useState(false);
+  const { loginLoading } = useSelector((state) => state.user);
+  const [email, onChangeEmail] = useInput('');
+  const [password, onChangePassword] = useInput('');
 
   const onSubmitForm = useCallback(() => {
-    console.log(id, password);
-    dispatch(loginAction({ id, password }));
-  }, [id, password]);
+    console.log(email, password);
+    dispatch({
+      type: LOG_IN_REQUEST,
+      data: { email, password },
+    });
+  }, [email, password]);
 
   return (
     <FormWrapper onFinish={onSubmitForm}>
       <div>
         <label htmlFor="user-id">아이디</label>
         <br />
-        <Input name="user-id" value={id} onChange={onChangeId} required />
+        <Input name="user-id" value={email} onChange={onChangeEmail} required />
       </div>
       <div>
         <label htmlFor="user-password">패스워드</label>
@@ -44,7 +47,7 @@ const LoginForm = () => {
         />
       </div>
       <ButtonWrapper>
-        <Button type="primary" htmlType="submit" loading={false}>
+        <Button type="primary" htmlType="submit" loading={loginLoading}>
           로그인
         </Button>
         <Link href="/signup">
