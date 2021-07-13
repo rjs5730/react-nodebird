@@ -15,15 +15,19 @@ function FollowButton({ post }) {
     if (isFollowing) {
       dispatch({
         type: UNFOLLOW_REQUEST,
-        data: post.id,
+        data: post.User.id,
       });
     } else {
       dispatch({
         type: FOLLOW_REQUEST,
-        data: post.id,
+        data: post.User.id,
       });
     }
   }, [isFollowing]);
+
+  if (post.User.id === me.id) {
+    return null;
+  }
 
   return (
     <Button loading={followLoading || unfollowLoading} onClick={onClickButton}>
