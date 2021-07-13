@@ -10,11 +10,13 @@ const NicknameEditForm = () => {
   const dispatch = useDispatch();
 
   const onSubmit = useCallback(() => {
+    console.log('testtest');
     dispatch({
       type: CHANGE_NICKNAME_REQUEST,
       data: nickname,
     });
   }, [nickname]);
+
   return (
     <Form
       style={{
@@ -22,13 +24,13 @@ const NicknameEditForm = () => {
         border: '1px solid #d9d9d9',
         padding: '10px',
       }}
-      onFinish={onSubmit}
     >
       <Input.Search
         value={nickname}
         onChange={onChangeNickname}
         addonBefore="닉네임"
         enterButton="수정"
+        onSearch={onSubmit}
       />
     </Form>
   );

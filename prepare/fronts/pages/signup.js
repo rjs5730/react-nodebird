@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { Button, Checkbox, Form, Input } from 'antd';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { Router } from 'next/router';
+import Router from 'next/router';
 import AppLayout from '../components/AppLayout';
 import useInput from '../hooks/useInput';
 
@@ -17,16 +17,28 @@ const Signup = () => {
   const [termError, setTermError] = useState(false);
 
   const [email, onChangeEmail] = useInput('');
-  const [nick, onChangeNick] = useInput('');
+  const [nickname, onChangeNickname] = useInput('');
   const [password, onChangePassword] = useInput('');
-  const { isSigningUp, me } = useSelector((state) => state.user);
+  const { isSigningUp, signUpDone, signUpError, me } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (me) {
-      alert('로그인 했으니 메인페이지로 이동합니다');
-      Router.push('/');
+      Router.replace('/');
     }
-  }, [me && me.id]);
+  }, [me]);
+
+  useEffect(() => {
+    if (signUpDone) {
+      alert('로그인 했으니 메인페이지로 이동합니다');
+      Router.replace('/');
+    }
+  }, [signUpDone]);
+
+  useEffect(() => {
+    if (signUpError) {
+      alert(signUpError);
+    }
+  }, signUpError);
 
   const onSubmit = useCallback(() => {
     if (password !== passwordCheck) {
@@ -40,10 +52,10 @@ const Signup = () => {
       data: {
         email,
         password,
-        nick,
+        nickname,
       },
     });
-  }, [email, password, passwordCheck, term]);
+  }, [email, password, nickname, passwordCheck, term]);
 
   const onChangePasswordCheck = useCallback(
     (e) => {
@@ -81,9 +93,9 @@ const Signup = () => {
             <br />
             <Input
               name="user-nick"
-              value={nick}
+              value={nickname}
               required
-              onChange={onChangeNick}
+              onChange={onChangeNickname}
             />
           </div>
           <div>
