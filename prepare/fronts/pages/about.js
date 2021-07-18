@@ -11,7 +11,7 @@ import { LOAD_POSTS_REQUEST } from '../reducers/post';
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
 import wrapper from '../store/configureStore';
 
-const Home = () => {
+const About = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
   const { mainPosts, hasMorePosts, loadPostsLoading, retweetError } = useSelector(
@@ -87,4 +87,4 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   await store.sagaTask.toPromise();
 });
 
-export default Home;
+export default About;
