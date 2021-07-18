@@ -3,10 +3,12 @@ const express = require('express');
 const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts');
 const userRouter = require('./routes/user');
+const hashtagRouter = require('./routes/hashtag');
 const cors = require('cors');
 const passport = require('passport');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const path = require('path');
 
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
@@ -26,6 +28,7 @@ passportConfig();
 
 	// 프론트에서 post로 보낸것을 req.body 에 데이터를 넣어줌
 app.use(express.json());
+app.use('/', express.static(path.join(__dirname, 'uploads')))
 app.use(express.urlencoded({ extended: true}));
 app.use(cookieParser());
 app.use(session({
@@ -49,6 +52,7 @@ app.use(cors({
 app.use('/post',postRouter);
 app.use('/posts',postsRouter);
 app.use('/user',userRouter);
+app.use('/hashtag',hashtagRouter);
 
 // 이 사이에 에러처리 미들웨어 내부적으로 존재
 
